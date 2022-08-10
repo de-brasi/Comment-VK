@@ -12,12 +12,12 @@ import sys
 import os
 
 DIR_PATH = os.getcwd()
-LOG_FILE = open(DIR_PATH + '/into_logs.txt', 'a')
+LOG_FILE = open(DIR_PATH + '/logs.txt', 'a')
 
 
 def into_logs(event: str) -> None:
     """
-    Logging event to into_logs.txt
+    Logging event to logs.txt
     """
     LOG_FILE.write(event + '\n')
 
@@ -39,6 +39,7 @@ login_other = vk_login_src.readline().strip()
 password_other = vk_login_src.readline().strip()
 vk_login_src.close()
 
+# Переменные
 comment_content = 'some words that will used as contents of commentary'.split()
 set_owner_id = set()  # проверка чтобы все фото из стека были из одной группы
 photo_stack = list()  # стек комментируемых фото - глобальная переменная
@@ -65,8 +66,7 @@ def actual_time() -> tuple:
     return time_now.hour, time_now.minute, time_now.second
 
 
-#######################################################################################################################
-def owners_id(link: str) -> int:
+def get_owners_id(link: str) -> int:
     """
     Getting the owner id of a photo from links to it on an album.
     If owner is club or community return negative value
@@ -105,20 +105,10 @@ def owners_id(link: str) -> int:
         return 0
 
 
-#######################################################################################################################
-
-def photo_id(link: str) -> int:  # функция обработки ссылок для получения id фото
+def photo_id(link: str) -> int:
     """
     Getting photo id from photo links in album
-    return photo_id
-
-    #Getting the owner id of a photo from links to it on an album.
-    #If owner is club or community return negative value
-    #:return owner_id
-    #:return 0 if exception was caught
-
-    #get_owners_id('https://vk.com/club1//photo-1_2/Falbum-3_4') -> -1
-    #get_owners_id('https://vk.com/id1?z=photo1_2%2Fphotos1') -> 1
+    return get_photos_id
     """
     if link:
         if len(set_owner_id) <= 1:
@@ -132,29 +122,29 @@ def photo_id(link: str) -> int:  # функция обработки ссыло�
                 if string.startswith('photo'):
                     flag = True
                     split_photo_string = ['-',
-                                          '_']  # словарь символов для разбиения подстроки содержащей photo_id в адресе фото
+                                          '_']  # словарь символов для разбиения подстроки содержащей get_photos_id в адресе фото
                     for y in split_photo_string:  # разбиение строки по разделительным символам - костыль регулярных выражений
                         string = string.replace(y, '/')
                     string = string.split('/')
                     photo_id = string[
-                        len(string) - 1]  # на момент написания кода photo_id было последним элементом в подстроке адреса,
+                        len(string) - 1]  # на момент написания кода get_photos_id было последним элементом в подстроке адреса,
                     try:  # начинающейся с photo-...
                         photo_id = int(photo_id)
                         return photo_id
                     except:
-                        # print('Подстрока, начинающаяся с photo-... найдена, но не удалось выделить photo_id являющееся int!')
+                        # print('Подстрока, начинающаяся с photo-... найдена, но не удалось выделить get_photos_id являющееся int!')
                         log_out.insert(INSERT, (
-                                '!Подстрока, начинающаяся с photo-... найдена, но не удалось выделить photo_id являющееся int!' + 12 * ' '))
+                                '!Подстрока, начинающаяся с photo-... найдена, но не удалось выделить get_photos_id являющееся int!' + 12 * ' '))
                         into_logs(
-                            '!Подстрока, начинающаяся с photo-... найдена, но не удалось выделить photo_id являющееся int!')
+                            '!Подстрока, начинающаяся с photo-... найдена, но не удалось выделить get_photos_id являющееся int!')
                         # log_out.insert(INSERT, ' ')
                     break
             if not flag:
-                # print('Не удалось найти подстроку, начинающуюся с (photo-...). Проблемы в функции photo_id()')
+                # print('Не удалось найти подстроку, начинающуюся с (photo-...). Проблемы в функции get_photos_id()')
                 log_out.insert(INSERT,
-                               '!Не удалось найти подстроку, начинающуюся с (photo-...). Проблемы в функции photo_id()' + 20 * ' ')
+                               '!Не удалось найти подстроку, начинающуюся с (photo-...). Проблемы в функции get_photos_id()' + 20 * ' ')
                 log_out.insert(INSERT, ' ')
-                into_logs('!Не удалось найти подстроку, начинающуюся с (photo-...). Проблемы в функции photo_id()')
+                into_logs('!Не удалось найти подстроку, начинающуюся с (photo-...). Проблемы в функции get_photos_id()')
         else:
             log_out.insert(INSERT,
                            "!Добавленны фото из нескольких групп. Пожалуйста, "
@@ -165,7 +155,6 @@ def photo_id(link: str) -> int:  # функция обработки ссыло�
                       "добавляйте фото только из одной группы")
 
 
-# Main
 def main(login=login, password=password, login_other=login_other, password_other=password_other):
     '''
     Основная функция, выполняемая параллельно tkinter-части
@@ -178,22 +167,18 @@ def main(login=login, password=password, login_other=login_other, password_other
     ИД хозяина группы из set_owner_id, где должен храниться только 1 элемент.
     '''
     # Перенаправление потока ошибок в файл логов
-    err = open(DIR_PATH + '/into_logs.txt', 'a')
-    old_err = sys.stderr
-    sys.stderr = err
+    new_err_stream = open(DIR_PATH + '/logs.txt', 'a')
+    old_err_stream = sys.stderr
+    sys.stderr = new_err_stream
 
     session = vk_api.VkApi(login=login, password=password, app_id=2685278)
     session.auth()
-    # log.append('выполнен вход в {}'.format(login) + (70 - len('выполнен вход в {}'.format(login))) * ' ')
     log_out.insert(INSERT, '-' * 35)
     log_out.insert(INSERT, 'выполнен вход в {}'.format(login) + (70 - len('выполнен вход в {}'.format(login))) * ' ')
     into_logs('выполнен вход в {}'.format(login))
-    # print('-'*20)
-    # print('выполнен вход в {}'.format(login))
-    # Организация цикла while (список не пустой) с try-except для отправки сообщений
-    owner_id = list(set_owner_id)[0]  # -201267535 id группы для комментирования (ТРЕНИРОВОЧНАЯ ГРУППА)
+    owner_id = list(set_owner_id)[0]
 
-    while True:  # вместо for i in range(10000)
+    while True:
         time = actual_time()
         if time[HOUR_IDX] == default_start_time_hour and time[MINUTE_IDX] == default_start_time_minute and time[
             SECOND_IDX] >= default_start_time_second:
@@ -202,34 +187,24 @@ def main(login=login, password=password, login_other=login_other, password_other
                 try:
                     for i in range(len(photo_stack)):
                         photo_id = photo_stack[0]
-                        # message = ( str(random.randint(0,100))+chr(random.randint(97, 122)) + ' ' +
-                        #                                    chr(random.randint(65, 90)) + str(random.randint(0,100)) )
                         message = (random.choice(comment_content))
                         session.method('photos.createComment', {'owner_id': owner_id,
-                                                                'photo_id': photo_id,
+                                                                'get_photos_id': photo_id,
                                                                 'message': message})
-                        # log.append('оставлен комментарий с {}'.format(login))
                         log_out.insert(INSERT, 'оставлен комментарий с {}'.format(login) + (
                                 70 - len('оставлен комментарий с {}'.format(login))) * ' ')
                         into_logs('оставлен комментарий с {}'.format(login))
-                        # print('оставлен комментарий с {}'.format(login))
                         photo_stack.remove(photo_id)
 
                 except vk_api.exceptions.Captcha:
-                    # log.append('выход из {}'.format(login))
-                    # print('-'*20)
                     log_out.insert(INSERT, '-' * 35)
-                    # print('выход из {}'.format(login))
                     log_out.insert(INSERT, 'выход из {}'.format(login) + (70 - len('выход из {}'.format(login))) * ' ')
                     into_logs('выход из {}'.format(login))
                     login, login_other = login_other, login  # меняем логин и пароль, аутентифицируемся
                     password, password_other = password_other, password
                     session = vk_api.VkApi(login=login, password=password, app_id=2685278)
                     session.auth()
-                    # log.append('выполнен вход в {}'.format(login))
-                    # print('-'*20)
                     log_out.insert(INSERT, '-' * 35)
-                    # print('выполнен вход в {}'.format(login))
                     log_out.insert(INSERT, 'выполнен вход в {}'.format(login) + (
                             70 - len('выполнен вход в {}'.format(login))) * ' ')
                     into_logs('выполнен вход в {}'.format(login))
@@ -247,7 +222,7 @@ def main(login=login, password=password, login_other=login_other, password_other
 
             break
 
-    sys.stderr = old_err
+    sys.stderr = old_err_stream
 
     log_out.insert(INSERT, '-' * 35)
     log_out.insert(INSERT, 'Программа закончила выполнение     ')
@@ -341,7 +316,7 @@ def enter(mod):
     global enter_lvl_2
     if mod == 'else':
         enter_lvl_2 = Button(window, text="     Ввод      ",
-                             command=push_link, font=font)
+                             command=pop_link, font=font)
         enter_lvl_2.grid(column=0, row=4)
     if mod == 'delete':
         enter_lvl_2 = Button(window, text="     Ввод      ",
@@ -349,12 +324,12 @@ def enter(mod):
         enter_lvl_2.grid(column=0, row=4)
 
 
-def push_link():  # отсылает полученную ссылку как строковый элемент в функцию для получения id фото?
+def pop_link():  # отсылает полученную ссылку как строковый элемент в функцию для получения id фото?
     finish_button()
     # log_button()
 
     link = link_enter.get()
-    owner_id = owners_id(link)
+    owner_id = get_owners_id(link)
     photos_id = photo_id(link)
     if link and owner_id and (photos_id not in photo_stack):
         if not set_owner_id:
@@ -470,7 +445,7 @@ window.geometry('370x270')
 
 # Определение нужного времени
 time_invitation = Label(window, text='Время (час/мин/сек) - ',
-                        font=font)
+                         font=font)
 time_invitation.grid(column=0, row=0)
 
 time_hour = Entry(window, width=2, font=font)

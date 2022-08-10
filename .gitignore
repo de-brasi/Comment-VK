@@ -1,4 +1,4 @@
-venv/
+venv
 .idea
-logs.txt
-vkEnterResources.txt
+service_information/logs.txt
+service_information/vkEnterResources.txt
