@@ -11,7 +11,7 @@ import datetime
 import sys
 import os
 
-DIR_PATH = os.getcwd()
+DIR_PATH = os.getcwd() + "/service_information"
 LOG_FILE = open(DIR_PATH + '/logs.txt', 'a')
 
 
@@ -217,7 +217,7 @@ def main(login=login, password=password, login_other=login_other, password_other
             grey_del()
 
             global enter_lvl_1
-            enter_lvl_1 = Button(window, text="ввести", command=click_enter, font=font)
+            enter_lvl_1 = Button(window, text="ввести", command=get_time_click, font=font)
             enter_lvl_1.grid(column=4, row=0)
 
             break
@@ -242,7 +242,7 @@ from tkinter import *
 
 
 # Действия конопок первого уровня______________________________________________________________________________________________
-def click_enter():  # пусть станет серой при нажатии
+def get_time_click():  # пусть станет серой при нажатии
     '''
     Действие кнопки верхнего уровня для ввода времени.
     Меняет значения hour_input, minute_input, second_input,
@@ -253,7 +253,7 @@ def click_enter():  # пусть станет серой при нажатии
     if time_hour.get(): default_start_time_hour = int(time_hour.get())  # изменение стандартного значения
     if time_minute.get(): default_start_time_minute = int(time_minute.get())  # времени в модуле autocomment_work_module
     if time_second.get(): default_start_time_second = int(time_second.get())
-    enter_lvl_1 = Button(window, text="ввести", command=click_enter,
+    enter_lvl_1 = Button(window, text="ввести", command=get_time_click,
                          bg='light grey', font=font)
     enter_lvl_1.grid(column=4, row=0)
 
@@ -441,7 +441,7 @@ def black_grey_del():
 font = ('Georgia', 10)  # шрифты Arial Bold
 window = Tk()
 window.title('ВК-комментарий по таймеру')
-window.geometry('370x270')
+window.geometry('440x330')
 
 # Определение нужного времени
 time_invitation = Label(window, text='Время (час/мин/сек) - ',
@@ -457,7 +457,11 @@ time_minute.grid(column=2, row=0)
 time_second = Entry(window, width=2, font=font)
 time_second.grid(column=3, row=0)
 
-enter_lvl_1 = Button(window, text="ввести", command=click_enter, font=font)
+time_hour.insert(constants.END, str(17))
+time_minute.insert(constants.END, str(0))
+time_second.insert(constants.END, str(0))
+
+enter_lvl_1 = Button(window, text="ввести", command=get_time_click, font=font)
 enter_lvl_1.grid(column=4, row=0)
 
 nothing0 = Label(window, text=' ', font=font)  # nothing - костыль для пропуска строки
