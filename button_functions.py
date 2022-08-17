@@ -1,6 +1,6 @@
 from DataStorage import Data
 from Handler import Handler
-from Handler import HandlingMode
+from Handler import Mode
 from tkinter import Entry
 from tkinter import IntVar
 
@@ -24,10 +24,10 @@ def get_time_click(data_storage: Data,
 
 # TODO: make switch-buttons class for
 #  auto select colours for non-active buttons
-def set_add_mode(selected_mode: HandlingMode,
+def set_add_mode(selected_mode: Mode,
                  button_refs: dict
                  ):
-    selected_mode = HandlingMode.ADD
+    selected_mode.set_mode("add")
     button_refs['set_add_mode_button'].config(
         background='grey'
     )
@@ -36,10 +36,10 @@ def set_add_mode(selected_mode: HandlingMode,
     )
 
 
-def set_del_mode(selected_mode: HandlingMode,
+def set_del_mode(selected_mode: Mode,
                  button_refs: dict
                  ):
-    selected_mode = HandlingMode.DELETE
+    selected_mode.set_mode("delete")
     button_refs['set_del_mode_button'].config(
         background='grey'
     )
@@ -52,13 +52,15 @@ def handle_link(link: str,
                 data_storage: Data,
                 photo_counter: IntVar,
                 handler: Handler,
-                mode: HandlingMode):
+                mode: Mode):
     # TODO: raise exception page if link not valid
     try:
         handler.validate_url(link)
         owner = handler.get_owner_id(link)
         photo = handler.get_photo_id(link)
-        if mode == HandlingMode.ADD:
+        # TODO: нормальная реализация класса для mode,
+        # TODO: вместо mode[0]
+        if mode.get_mode() == "add":
             handler.add_photo(
                 owner, photo, data_storage, photo_counter
             )

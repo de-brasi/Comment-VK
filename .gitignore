@@ -2,3 +2,4 @@ venv
 .idea
 service_information/logs.txt
 service_information/vkEnterResources.txt
+.pyc[od]

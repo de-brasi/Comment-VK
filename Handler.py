@@ -3,9 +3,23 @@ from tkinter import IntVar
 from enum import Enum
 
 
-class HandlingMode(Enum):
-    ADD = 1,
-    DELETE = 2
+class Mode:
+    """
+    Only nwo mods are valid - delete and add
+    """
+    __slots__ = ("mode", "available")
+
+    def __init__(self, mode: str) -> None:
+        self.available = ("delete", "add")
+        assert mode in self.available
+        self.mode = mode
+
+    def get_mode(self) -> str:
+        return self.mode
+
+    def set_mode(self, mode: str) -> None:
+        assert mode in self.available
+        self.mode = mode
 
 
 class Handler:
@@ -24,7 +38,6 @@ class Handler:
     def get_photo_id(self, url: str):
         # TODO: основная работа по валидации должна быть перенесена в validator
         # TODO: Тут же нужно просто брать какой то определенный токен и возвращать его
-        # TODO: ошибку ValueError тоже должен поднимать validator
         """
         Get id of photo from link.
         Assert that the link has the correct structure.

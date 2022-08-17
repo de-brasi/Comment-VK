@@ -1,5 +1,5 @@
 from Handler import Handler
-from Handler import HandlingMode
+from Handler import Mode
 from DataStorage import Data
 from tkinter import constants
 from tkinter import scrolledtext
@@ -38,7 +38,7 @@ class Interface:
 
     def __init__(self, _handler: Handler):
         self.handler = _handler
-        self.handling_mode = HandlingMode.ADD
+        self.handling_mode = Mode("add")
 
         self.view = tkinter.Tk()
         self.data = Data()
@@ -138,7 +138,7 @@ class Interface:
         nothing0 = tkinter.Label(
             self.view,
             text=' ',
-            font=FONT)  # nothing - костыль для пропуска строки
+            font=FONT) 
         nothing0.grid(
             column=0,
             row=1)
@@ -192,27 +192,23 @@ class Interface:
         """
         set_add_mode_button = tkinter.Button(
             self.view, text=ADD_PHOTO_TEXT,
+            command=lambda: button_functions.set_add_mode(
+                self.handling_mode, self.button_references
+            ),
             background='light grey',
             font=FONT)
         set_add_mode_button.grid(column=0, row=2)
         self.button_references['set_add_mode_button'] = set_add_mode_button
-        set_add_mode_button.config(
-            command=lambda: button_functions.set_add_mode(
-                self.handling_mode, self.button_references
-            )
-        )
 
         set_del_mode_button = tkinter.Button(
             self.view, text=DEL_PHOTO_TEXT,
             background='light grey',
+            command=lambda: button_functions.set_del_mode(
+                self.handling_mode, self.button_references
+            ),
             font=FONT)
         set_del_mode_button.grid(column=4, row=2)
         self.button_references['set_del_mode_button'] = set_del_mode_button
-        set_del_mode_button.config(
-            command=lambda: button_functions.set_del_mode(
-                self.handling_mode, self.button_references
-            )
-        )
 
     def make_entering_link(self):
         """
@@ -266,6 +262,8 @@ class Interface:
         log_out.grid(column=0, row=8, columnspan=6)
 
     def start(self):
+        # TODO: multithread version
         pass
+
 
 # TODO: исчезновение дефолтного времени при начале ввода своего времени
