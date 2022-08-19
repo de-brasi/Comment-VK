@@ -1,6 +1,6 @@
 venv
 .idea
 service_information/logs.txt
-service_information/vkEnterResources.txt
+#service_information/vkEnterResources.txt
 /__pycache__
 .pyc[od]
