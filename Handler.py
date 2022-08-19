@@ -1,3 +1,6 @@
+import DataStorage
+import GUI
+import utils
 from DataStorage import Data
 from tkinter import IntVar
 from enum import Enum
@@ -32,8 +35,9 @@ class Handler:
     def __init__(self):
         pass
 
-    def core(self, SOME_DATA, user_interface):
-        pass
+    def core(self, user_interface: GUI.Interface):
+        collected_data = user_interface.data
+        users = utils.get_users_access_info()
 
     def get_photo_id(self, url: str):
         # TODO: основная работа по валидации должна быть перенесена в validator

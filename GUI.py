@@ -1,3 +1,5 @@
+import constants as app_constants
+
 from Handler import Handler
 from Handler import Mode
 from DataStorage import Data
@@ -6,22 +8,6 @@ from tkinter import scrolledtext
 
 import button_functions
 import tkinter
-
-FONT = ('Georgia', 10)
-TITLE = "ВК-комментарий по таймеру"
-GEOMETRY = "440x330"
-
-TIME_INVITATION = "Время (час/мин/сек) - "
-TIME_ENTER_BUTTON_TEXT = "ввести"
-
-PHOTO_COUNT_TEXT = "Добавлено фото:"
-
-ADD_PHOTO_TEXT = "Добавить к списку"
-DEL_PHOTO_TEXT = "Удалить из списка"
-
-TIME_DEFAULT_HOUR = 12
-TIME_DEFAULT_MINUTE = 0
-TIME_DEFAULT_SECOND = 0
 
 
 class Interface:
@@ -34,7 +20,7 @@ class Interface:
     """
     __slots__ = ('view', 'data', 'handler',
                  'photo_counter', 'button_references',
-                 'handling_mode')
+                 'handling_mode', 'logs_to_user')
 
     def __init__(self, _handler: Handler):
         self.handler = _handler
@@ -44,8 +30,8 @@ class Interface:
         self.data = Data()
         self.button_references = dict()
 
-        self.view.title(TITLE)
-        self.view.geometry(GEOMETRY)
+        self.view.title(app_constants.TITLE)
+        self.view.geometry(app_constants.GEOMETRY)
 
         self.photo_counter = tkinter.IntVar()
         self.photo_counter.set(0)
@@ -80,8 +66,8 @@ class Interface:
         time_invitation = \
             tkinter.Label(
                 self.view,
-                text=TIME_INVITATION,
-                font=FONT)
+                text=app_constants.TIME_INVITATION,
+                font=app_constants.FONT)
         time_invitation.grid(
             column=0,
             row=0)
@@ -90,8 +76,8 @@ class Interface:
         time_hour = tkinter.Entry(
             self.view,
             width=2,
-            font=FONT)
-        time_hour.insert(constants.END, str(TIME_DEFAULT_HOUR))
+            font=app_constants.FONT)
+        time_hour.insert(constants.END, str(app_constants.TIME_DEFAULT_HOUR))
         time_hour.grid(
             column=1,
             row=0)
@@ -99,8 +85,8 @@ class Interface:
         time_minute = tkinter.Entry(
             self.view,
             width=2,
-            font=FONT)
-        time_minute.insert(constants.END, str(TIME_DEFAULT_MINUTE))
+            font=app_constants.FONT)
+        time_minute.insert(constants.END, str(app_constants.TIME_DEFAULT_MINUTE))
         time_minute.grid(
             column=2,
             row=0)
@@ -108,17 +94,17 @@ class Interface:
         time_second = tkinter.Entry(
             self.view,
             width=2,
-            font=FONT)
+            font=app_constants.FONT)
         time_second.grid(
             column=3,
             row=0)
-        time_second.insert(constants.END, str(TIME_DEFAULT_SECOND))
+        time_second.insert(constants.END, str(app_constants.TIME_DEFAULT_SECOND))
 
         # Time button
         time_enter_button = tkinter.Button(
             self.view,
-            text=TIME_ENTER_BUTTON_TEXT,
-            font=FONT)
+            text=app_constants.TIME_ENTER_BUTTON_TEXT,
+            font=app_constants.FONT)
         self.button_references['time_enter_button'] = time_enter_button
         time_enter_button.config(
             command=lambda: button_functions.get_time_click(
@@ -138,7 +124,7 @@ class Interface:
         nothing0 = tkinter.Label(
             self.view,
             text=' ',
-            font=FONT) 
+            font=app_constants.FONT)
         nothing0.grid(
             column=0,
             row=1)
@@ -146,7 +132,7 @@ class Interface:
         nothing1 = tkinter.Label(
             self.view,
             text=' ',
-            font=FONT)
+            font=app_constants.FONT)
         nothing1.grid(
             column=1,
             row=1)
@@ -154,7 +140,7 @@ class Interface:
         nothing2 = tkinter.Label(
             self.view,
             text=' ',
-            font=FONT)
+            font=app_constants.FONT)
         nothing2.grid(
             column=2,
             row=1)
@@ -168,8 +154,8 @@ class Interface:
         count_photo_text = \
             tkinter.Label(
                 self.view,
-                text=PHOTO_COUNT_TEXT,
-                font=FONT)
+                text=app_constants.PHOTO_COUNT_TEXT,
+                font=app_constants.FONT)
         count_photo_text.grid(
             column=0,
             row=1)
@@ -178,7 +164,7 @@ class Interface:
             tkinter.Label(
                 self.view,
                 textvariable=self.photo_counter,
-                font=FONT,
+                font=app_constants.FONT,
                 background="#fff")
         count_photo_val.grid(
             column=1,
@@ -191,22 +177,22 @@ class Interface:
         :return:
         """
         set_add_mode_button = tkinter.Button(
-            self.view, text=ADD_PHOTO_TEXT,
+            self.view, text=app_constants.ADD_PHOTO_TEXT,
             command=lambda: button_functions.set_add_mode(
                 self.handling_mode, self.button_references
             ),
             background='light grey',
-            font=FONT)
+            font=app_constants.FONT)
         set_add_mode_button.grid(column=0, row=2)
         self.button_references['set_add_mode_button'] = set_add_mode_button
 
         set_del_mode_button = tkinter.Button(
-            self.view, text=DEL_PHOTO_TEXT,
+            self.view, text=app_constants.DEL_PHOTO_TEXT,
             background='light grey',
             command=lambda: button_functions.set_del_mode(
                 self.handling_mode, self.button_references
             ),
-            font=FONT)
+            font=app_constants.FONT)
         set_del_mode_button.grid(column=4, row=2)
         self.button_references['set_del_mode_button'] = set_del_mode_button
 
@@ -219,11 +205,11 @@ class Interface:
         # TODO: make invitation on Label that disappear when click and add link
         link_invitation = tkinter.Label(
             self.view, text='Вставьте ссылку',
-            font=FONT)
+            font=app_constants.FONT)
         link_invitation.grid(column=0, row=3)
 
         link_enter = tkinter.Entry(
-            self.view, width=15, font=FONT)
+            self.view, width=15, font=app_constants.FONT)
         link_enter.grid(column=4, row=3)
 
         link_enter_button = tkinter.Button(
@@ -236,7 +222,7 @@ class Interface:
                 self.handler,
                 self.handling_mode
             ),
-            font=FONT
+            font=app_constants.FONT
         )
         link_enter_button.grid(column=5, row=3)
 
@@ -249,7 +235,7 @@ class Interface:
         start_button = tkinter.Button(
             self.view, text="Старт",
             command=lambda: self.start,
-            font=FONT)
+            font=app_constants.FONT)
         start_button.grid(column=0, row=4)
         self.button_references['start_button'] = start_button
 
@@ -258,12 +244,16 @@ class Interface:
         Show log to user.
         :return:
         """
-        log_out = scrolledtext.ScrolledText(self.view, width=35, height=10)
-        log_out.grid(column=0, row=8, columnspan=6)
+        self.logs_to_user = scrolledtext.ScrolledText(self.view, width=35, height=10)
+        self.logs_to_user.grid(column=0, row=8, columnspan=6)
 
     def start(self):
         # TODO: multithread version
-        pass
+        """
+        Single thread version.
+        :return:
+        """
+        self.handler.core(self)
 
 
 # TODO: исчезновение дефолтного времени при начале ввода своего времени
