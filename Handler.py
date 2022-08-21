@@ -1,9 +1,7 @@
 import DataStorage
-import GUI
 import utils
 from DataStorage import Data
 from tkinter import IntVar
-from enum import Enum
 
 
 class Mode:
@@ -35,7 +33,7 @@ class Handler:
     def __init__(self):
         pass
 
-    def core(self, user_interface: GUI.Interface):
+    def core(self, user_interface):
         collected_data = user_interface.data
         users = utils.get_users_access_info()
 
