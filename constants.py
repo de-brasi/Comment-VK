@@ -12,11 +12,9 @@ PHOTO_COUNT_TEXT = "Добавлено фото:"
 ADD_PHOTO_TEXT = "Добавить к списку"
 DEL_PHOTO_TEXT = "Удалить из списка"
 
-TIME_DEFAULT_HOUR = 12
-TIME_DEFAULT_MINUTE = 0
-TIME_DEFAULT_SECOND = 0
-
 # AUTHORIZATION_INFO_FILE = "./service_data/vk_enter_resources.txt"
 AUTHORIZATION_INFO_FILE = \
     str(pathlib.Path(__file__).parent.resolve()) + \
     "/service_data/vk_enter_resources.txt"
+
+VK_STANDALONE_APPLICATION_ID = 2685278

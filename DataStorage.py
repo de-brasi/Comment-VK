@@ -1,13 +1,14 @@
+import datetime
+
+
 class Data:
     __slots__ = (
-        "time_hour", "time_minute", "time_second",
-        "photo_counter", "owner_to_photo"
+        "start_time", "photo_counter",
+        "owner_to_photo"
     )
 
     def __init__(self):
-        self.time_hour = 0
-        self.time_minute = 0
-        self.time_second = 0
+        self.start_time = datetime.datetime.now()
         self.photo_counter = 0
         self.owner_to_photo = dict()
 
@@ -57,6 +58,20 @@ class Data:
             return True
         except:
             return False
+
+    def get_start_time(self) -> datetime.datetime:
+        # TODO: catch case when difference between dates too big that new day start
+        pass
+
+    def set_start_time(self, **time_value) -> None:
+        hour = time_value['hour'] if time_value['hour'] else 0
+        minute = time_value['minute'] if time_value['minute'] else 0
+        second = time_value['second'] if time_value['second'] else 0
+        if passed time less then now:
+            day = next day
+        else:
+            day = day
+        remember values
 
 # TODO: добавить в Дату служебные контейнеры -
 #  слова для комментирования, фотки и т.д
