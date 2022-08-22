@@ -14,12 +14,16 @@ def get_time_click(data_storage: Data,
     Getting time value from user.
     Store in data storage.
     """
-    if time_hour.get():
-        data_storage.time_hour = int(time_hour.get())
-    if time_minute.get():
-        data_storage.time_minute = int(time_minute.get())
-    if time_second.get():
-        data_storage.time_second = int(time_second.get())
+    if any((time_hour.get(), time_minute.get(), time_second.get())):
+        data_storage.set_start_time(
+            hour=time_hour.get(),
+            minute=time_minute.get(),
+            second=time_second.get()
+        )
+        # TODO: show message about working time: DAY/HOUR/MIN/SEC
+    else:
+        # TODO: show message that time not write
+        pass
 
 
 # TODO: make switch-buttons class for
