@@ -17,4 +17,6 @@ AUTHORIZATION_INFO_FILE = \
     str(pathlib.Path(__file__).parent.resolve()) + \
     "/service_data/vk_enter_resources.txt"
 
+PREPARATION_TIME_IN_SECONDS = 2
+
 VK_STANDALONE_APPLICATION_ID = 2685278

@@ -8,6 +8,8 @@ from tkinter import scrolledtext
 
 import button_functions
 import tkinter
+import time
+import datetime
 
 
 class Interface:
@@ -20,9 +22,11 @@ class Interface:
     """
     __slots__ = ('view', 'data', 'handler',
                  'photo_counter', 'button_references',
-                 'handling_mode', 'logs_to_user')
+                 'handling_mode', 'logs_to_user', 'EXAMPLE')
 
     def __init__(self, _handler: Handler):
+        self.EXAMPLE = -1
+
         self.handler = _handler
         self.handling_mode = Mode("add")
 
@@ -72,12 +76,13 @@ class Interface:
             column=0,
             row=0)
 
+        default_time = self.data.get_start_time()
         # Time windows
         time_hour = tkinter.Entry(
             self.view,
             width=2,
             font=app_constants.FONT)
-        time_hour.insert(constants.END, str(app_constants.TIME_DEFAULT_HOUR))
+        time_hour.insert(constants.END, str(default_time.hour))
         time_hour.grid(
             column=1,
             row=0)
@@ -86,7 +91,7 @@ class Interface:
             self.view,
             width=2,
             font=app_constants.FONT)
-        time_minute.insert(constants.END, str(app_constants.TIME_DEFAULT_MINUTE))
+        time_minute.insert(constants.END, str(default_time.minute))
         time_minute.grid(
             column=2,
             row=0)
@@ -98,7 +103,7 @@ class Interface:
         time_second.grid(
             column=3,
             row=0)
-        time_second.insert(constants.END, str(app_constants.TIME_DEFAULT_SECOND))
+        time_second.insert(constants.END, str(default_time.second))
 
         # Time button
         time_enter_button = tkinter.Button(
@@ -234,7 +239,7 @@ class Interface:
         """
         start_button = tkinter.Button(
             self.view, text="Старт",
-            command=lambda: self.start,
+            command=lambda: self.start(),
             font=app_constants.FONT)
         start_button.grid(column=0, row=4)
         self.button_references['start_button'] = start_button
@@ -244,8 +249,13 @@ class Interface:
         Show log to user.
         :return:
         """
-        self.logs_to_user = scrolledtext.ScrolledText(self.view, width=35, height=10)
-        self.logs_to_user.grid(column=0, row=8, columnspan=6)
+        self.logs_to_user = \
+            scrolledtext.ScrolledText(
+                self.view, width=35, height=10
+            )
+        self.logs_to_user.grid(
+            column=0, row=8, columnspan=6
+        )
 
     def start(self):
         # TODO: multithread version
@@ -253,7 +263,21 @@ class Interface:
         Single thread version.
         :return:
         """
-        self.handler.core(self)
+        # Пока нормально работает только при одном нажатии
+        # TODO: на выполнение этой команды надо создавать отдельный поток
+        # TODO: для выполнения core функции. Причем сразу после нажатия кнопки
+        # TODO: start необходимо сбрасывать предыдущий поток чтобы не
+        # TODO: пораждать кучу задач при множественном нажатии
+        start_time = self.data.get_start_time()
+        time_for_sleep = \
+            (start_time - datetime.datetime.now()).seconds - \
+            app_constants.PREPARATION_TIME_IN_SECONDS
+        time.sleep(time_for_sleep)
+        while True:
+            if datetime.datetime.now() >= start_time:
+                self.handler.core(self)
+                break
+
 
 
 # TODO: исчезновение дефолтного времени при начале ввода своего времени
