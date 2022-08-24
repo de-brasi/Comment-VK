@@ -1,19 +1,21 @@
 import datetime
 import calendar
 
-from tkinter import IntVar
+from random import randint
 
 
 class Data:
     __slots__ = (
         "start_time", "photo_counter",
-        "owner_to_photo"
+        "owner_to_photo", "comment_content"
     )
 
     def __init__(self):
         self.start_time = datetime.datetime.now()
         self.photo_counter = 0
         self.owner_to_photo = dict()
+        self.comment_content = \
+            'some words that will used as contents of commentary'.split()
 
     def check_availability(self, owner: int, photo: int) -> bool:
         """
@@ -80,6 +82,13 @@ class Data:
             second=received_second
         )
         self._adjust_time_value()
+
+    def get_random_word(self) -> str:
+        """
+        Get random word from storage with word for comment
+        """
+        word_idx = randint(0, len(self.comment_content) - 1)
+        return self.comment_content[word_idx]
 
     def empty(self) -> bool:
         return self.photo_counter == 0
