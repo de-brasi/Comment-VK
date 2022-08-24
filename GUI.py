@@ -2,7 +2,6 @@ import constants as app_constants
 
 from Handler import Handler
 from Handler import Mode
-from DataStorage import Data
 from tkinter import constants
 from tkinter import scrolledtext
 
@@ -10,6 +9,7 @@ import button_functions
 import tkinter
 import time
 import datetime
+import DataStorage
 
 
 class Interface:
@@ -31,14 +31,13 @@ class Interface:
         self.handling_mode = Mode("add")
 
         self.view = tkinter.Tk()
-        self.data = Data()
+        self.data = DataStorage.Data()
         self.button_references = dict()
 
         self.view.title(app_constants.TITLE)
         self.view.geometry(app_constants.GEOMETRY)
 
-        self.photo_counter = tkinter.IntVar()
-        self.photo_counter.set(0)
+        self.photo_counter = DataStorage.TkCounter()
 
         "First interface`s row"
         self.make_getting_start_time_from_user()
@@ -267,7 +266,7 @@ class Interface:
         # TODO: на выполнение этой команды надо создавать отдельный поток
         # TODO: для выполнения core функции. Причем сразу после нажатия кнопки
         # TODO: start необходимо сбрасывать предыдущий поток чтобы не
-        # TODO: пораждать кучу задач при множественном нажатии
+        # TODO: порождать кучу задач при множественном нажатии
         start_time = self.data.get_start_time()
         time_for_sleep = \
             (start_time - datetime.datetime.now()).seconds - \
