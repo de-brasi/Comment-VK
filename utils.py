@@ -1,7 +1,8 @@
 from collections import namedtuple
 from typing import List
 
-import constants
+import constants as app_constants
+import vk_api
 
 
 def get_users_access_info() -> List[namedtuple]:
@@ -11,7 +12,7 @@ def get_users_access_info() -> List[namedtuple]:
     :param :
     :return:
     """
-    file = open(constants.AUTHORIZATION_INFO_FILE, 'r')
+    file = open(app_constants.AUTHORIZATION_INFO_FILE, 'r')
     users_info = list()
 
     UserInfo = namedtuple("UserInfo", ["login", "password"])
@@ -20,3 +21,13 @@ def get_users_access_info() -> List[namedtuple]:
         login, password = login_password.split()
         users_info.append(UserInfo(login, password))
     return users_info
+
+
+def make_session(passing_info):
+    session = vk_api.VkApi(
+        login=passing_info.login,
+        password=passing_info.password,
+        app_id=app_constants.VK_STANDALONE_APPLICATION_ID
+    )
+    session.auth()
+    return session
