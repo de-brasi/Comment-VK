@@ -4,28 +4,6 @@ import calendar
 from tkinter import IntVar
 
 
-class TkCounter:
-    __slots__ = ('value',)
-
-    def __init__(self):
-        self.value = IntVar()
-        self.set_value(0)
-
-    def incr(self) -> int:
-        self.set_value(self.get_value() + 1)
-        return self.get_value()
-
-    def decr(self) -> int:
-        self.set_value(self.get_value() - 1)
-        return self.get_value()
-
-    def set_value(self, value: int) -> None:
-        self.value.set(value)
-
-    def get_value(self) -> int:
-        return self.value.get()
-
-
 class Data:
     __slots__ = (
         "start_time", "photo_counter",

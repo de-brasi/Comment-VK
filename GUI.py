@@ -37,7 +37,8 @@ class Interface:
         self.view.title(app_constants.TITLE)
         self.view.geometry(app_constants.GEOMETRY)
 
-        self.photo_counter = DataStorage.TkCounter()
+        self.photo_counter = tkinter.IntVar()
+        self.photo_counter.set(0)
 
         "First interface`s row"
         self.make_getting_start_time_from_user()
