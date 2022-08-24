@@ -1,4 +1,3 @@
-import DataStorage
 import utils
 from DataStorage import Data
 from tkinter import IntVar
@@ -36,6 +35,13 @@ class Handler:
     def core(self, user_interface):
         collected_data = user_interface.data
         users = utils.get_users_access_info()
+        for user in users:
+            session = utils.make_session(user)
+            while data not empty:
+                try comment
+                except next user
+
+        if data not empty: again
 
     def get_photo_id(self, url: str):
         # TODO: основная работа по валидации должна быть перенесена в validator
