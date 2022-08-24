@@ -103,6 +103,9 @@ class Data:
         )
         self._adjust_time_value()
 
+    def empty(self) -> bool:
+        return self.photo_counter == 0
+
     def _adjust_time_value(self):
         """
         Compares the start_time value with the current time
