@@ -32,16 +32,29 @@ class Handler:
     def __init__(self):
         pass
 
-    def core(self, user_interface):
-        collected_data = user_interface.data
-        users = utils.get_users_access_info()
-        for user in users:
-            session = utils.make_session(user)
-            while data not empty:
-                try comment
-                except next user
+    def core(self, user_interface, sessions):
+        # TODO: наверное лучше сделать авторизацию в вызывающей функции и
+        #  проверять полноту контейнера установленных сессий
 
-        if data not empty: again
+        sessions_it = iter(sessions)
+        cur_session = next(sessions_it)
+
+        owner_id, photo_id = user_interface.data.pop()
+
+        while not user_interface.data.empty():
+            try:
+                word = user_interface.data.get_random_word()
+                utils.make_comment(
+                    cur_session, owner_id, photo_id, word
+                )
+                owner_id, photo_id = user_interface.data.pop()
+            except:
+                # TODO: какое исключение если капчасолвер поставлю?
+                try:
+                    cur_session = next(sessions_it)
+                except StopIteration:
+                    sessions_it = iter(sessions)
+                    cur_session = next(sessions_it)
 
     def get_photo_id(self, url: str):
         # TODO: основная работа по валидации должна быть перенесена в validator
