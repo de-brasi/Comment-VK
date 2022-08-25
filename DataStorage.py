@@ -26,7 +26,7 @@ class Data:
         :param photo:
         :return:
         """
-        return photo in self.owner_to_photo.get(owner, [])
+        return photo in self.owner_to_photo.get(owner, set())
 
     def delete(self, owner: int, photo: int) -> bool:
         """
@@ -45,6 +45,19 @@ class Data:
             return True
         except:
             return False
+
+    def pop(self) -> tuple:
+        """
+        Get and delete owner and photo from storage.
+        Choice depends from base storage container data type.
+        In case of python dict - random choice.
+        """
+        # Invariant: storage(owner_to_photo) not empty,
+        #   value for chosen key not empty
+        owner = next(iter(self.owner_to_photo.keys()))
+        photo = next(iter(self.owner_to_photo[owner]))
+        self.delete(owner, photo)
+        return owner, photo
 
     def add(self, owner: int, photo: int) -> bool:
         """
