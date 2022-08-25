@@ -1,4 +1,5 @@
 import constants as app_constants
+import utils
 
 from Handler import Handler
 from Handler import Mode
@@ -268,15 +269,30 @@ class Interface:
         # TODO: для выполнения core функции. Причем сразу после нажатия кнопки
         # TODO: start необходимо сбрасывать предыдущий поток чтобы не
         # TODO: порождать кучу задач при множественном нажатии
-        start_time = self.data.get_start_time()
-        time_for_sleep = \
-            (start_time - datetime.datetime.now()).seconds - \
-            app_constants.PREPARATION_TIME_IN_SECONDS
-        time.sleep(time_for_sleep)
-        while True:
-            if datetime.datetime.now() >= start_time:
-                self.handler.core(self)
-                break
+
+        # TODO: блокировать кнопки ввода дат и фоток,
+        #  в идеале вообще отрисовать новое окно.
+        #  Тогда добавить и кнопку рестарта приложения с остановкой функции start
+        sessions = [
+            utils.make_session(user) for user in utils.get_users_access_info()
+        ]
+        if not sessions:
+            pass
+            # TODO: показать окно авторизации.
+            #  Вызванное окно должно получить от юзера данные,
+            #  либо закрыть приложение при отказе вводить
+            #  (во избежании переполнения стека)
+            # TODO: вызвать себя же еще раз
+        else:
+            start_time = self.data.get_start_time()
+            time_for_sleep = \
+                (start_time - datetime.datetime.now()).seconds - \
+                app_constants.PREPARATION_TIME_IN_SECONDS
+            time.sleep(time_for_sleep)
+            while True:
+                if datetime.datetime.now() >= start_time:
+                    self.handler.core(self, sessions)
+                    break
 
 
 
