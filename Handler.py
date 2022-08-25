@@ -66,7 +66,7 @@ class Handler:
         :param url
         :return: None or int
         """
-        url = self.split_link(url)
+        url = self._split_link(url)
         photo_info = url[4].split('_')
         photo_info = photo_info[-1]
         return int(photo_info)
@@ -80,7 +80,7 @@ class Handler:
         :param url:
         :return:
         """
-        url = self.split_link(url)
+        url = self._split_link(url)
         owner_info = url[3]
         if owner_info.startswith('club'):
             return int(owner_info[len('club'):]) * -1
@@ -117,7 +117,7 @@ class Handler:
                     photo_counter.get() + 1
                 )
 
-    def split_link(self, url):
+    def _split_link(self, url):
         splitting_symbols = ['/', '?z=', '%2F']  # словарь символов для разбиения адреса фото
         for x in splitting_symbols:  # разбиение строки по разделительным символам - костыль регулярных выражений
             url = url.replace(x, '/')
