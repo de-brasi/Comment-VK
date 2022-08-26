@@ -1,3 +1,4 @@
+import GUI
 import constants as app_constants
 import utils
 
@@ -23,11 +24,9 @@ class Interface:
     """
     __slots__ = ('view', 'data', 'handler',
                  'photo_counter', 'button_references',
-                 'handling_mode', 'logs_to_user', 'EXAMPLE')
+                 'handling_mode', 'logs_to_user')
 
     def __init__(self, _handler: Handler):
-        self.EXAMPLE = -1
-
         self.handler = _handler
         self.handling_mode = Mode("add")
 
@@ -51,10 +50,10 @@ class Interface:
         "Third interface`s row"
         self.make_buttons_for_handling_mode()
 
-        "Fourth строка интерфейса"
+        "Fourth interface`s row"
         self.make_entering_link()
 
-        "Fifth строка интерфейса"
+        "Fifth interface`s row"
         self.start_useful_work_button()
 
         # TODO: загрузка (сколько осталось времени)
@@ -266,9 +265,9 @@ class Interface:
         """
         # Пока нормально работает только при одном нажатии
         # TODO: на выполнение этой команды надо создавать отдельный поток
-        # TODO: для выполнения core функции. Причем сразу после нажатия кнопки
-        # TODO: start необходимо сбрасывать предыдущий поток чтобы не
-        # TODO: порождать кучу задач при множественном нажатии
+        #  для выполнения core функции. Причем сразу после нажатия кнопки
+        #  start необходимо сбрасывать предыдущий поток чтобы не
+        #  порождать кучу задач при множественном нажатии
 
         # TODO: блокировать кнопки ввода дат и фоток,
         #  в идеале вообще отрисовать новое окно.
@@ -276,6 +275,9 @@ class Interface:
         sessions = [
             utils.make_session(user) for user in utils.get_users_access_info()
         ]
+        # TODO: как то обработать ситуацию, когда введены неверные данные.
+        #  Мб как то смотреть на логин или есть в API методы
+        #  для проверки существования
         if not sessions:
             pass
             # TODO: показать окно авторизации.
@@ -293,7 +295,45 @@ class Interface:
                 if datetime.datetime.now() >= start_time:
                     self.handler.core(self, sessions)
                     break
+        # TODO: исчезновение дефолтного времени при начале ввода своего времени
 
 
+class MessageWindow:
+    __slots__ = ('view',)
 
-# TODO: исчезновение дефолтного времени при начале ввода своего времени
+    def __init__(self, message):
+        self.view = tkinter.Tk()
+        self.view.geometry(app_constants.GEOMETRY)
+
+        tkinter.Label(
+            self.view,
+            text=message,
+            font=app_constants.FONT
+        )
+        tkinter.Button(
+            self.view, text="Ok",
+            command=lambda: destroy_window(self.view),
+            background='light grey',
+            font=app_constants.FONT
+        )
+
+    def show(self):
+        self.view.mainloop()
+
+
+class RegistrationWindow:
+    __slots__ = ('view',)
+
+    def __init__(self):
+        self.view = tkinter.Tk()
+        self.view.geometry(app_constants.GEOMETRY)
+
+        # TODO: 2 Entry с дефолтным текстом логин/пароль,
+        #  пропадающие по щелчку + кнопка ввода
+
+    def show(self):
+        self.view.mainloop()
+
+
+def destroy_window(window: tkinter.Tk):
+    window.destroy()
