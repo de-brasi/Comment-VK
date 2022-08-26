@@ -1,3 +1,4 @@
+import GUI
 import utils
 from DataStorage import Data
 from tkinter import IntVar
@@ -103,14 +104,12 @@ class Handler:
                     photo_counter.get() - 1
                 )
         else:
-            # TODO: show information message that not exist
-            pass
+            GUI.MessageWindow("Вы не добавляли такого фото").show()
 
     def add_photo(self, owner: int, photo: int,
                   data_storage: Data, photo_counter: IntVar):
         if data_storage.check_availability(owner, photo):
-            # TODO: show information message that already exist
-            pass
+            GUI.MessageWindow("Такое фото уже существует").show()
         else:
             if data_storage.add(owner, photo):
                 photo_counter.set(
