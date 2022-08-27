@@ -36,5 +36,5 @@ def make_session(passing_info):
 def make_comment(session, owner_id, photo_id, *comment_words):
     message = ' '.join(comment_words)
     session.method('photos.createComment', {'owner_id': owner_id,
-                                            'get_photos_id': photo_id,
+                                            'photo_id': photo_id,
                                             'message': message})
