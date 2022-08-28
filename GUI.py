@@ -208,12 +208,14 @@ class Interface:
         """
         # TODO: make invitation on Label that disappear when click and add link
         link_invitation = tkinter.Label(
-            self.view, text='Вставьте ссылку',
+            self.view, text='Cсылка',
             font=app_constants.FONT)
         link_invitation.grid(column=0, row=3)
 
-        link_enter = tkinter.Entry(
-            self.view, width=15, font=app_constants.FONT)
+        link_enter = make_entry(self.view, background="#FFFFEF",
+                                font=app_constants.FONT,
+                                width=15, border_width=3,
+                                temporary_text="Вставьте ссылку")
         link_enter.grid(column=4, row=3)
 
         link_enter_button = tkinter.Button(
@@ -346,21 +348,31 @@ def destroy_window(window: tkinter.Tk):
     window.destroy()
 
 
-def make_entry(
-        parent, background, width, border_width, temporary_text=""
-) -> tkinter.Entry:
+def make_entry(parent, background, font,
+               width, border_width, temporary_text="") -> tkinter.Entry:
     entry = tkinter.Entry(
-        parent, bg=background, width=width, borderwidth=border_width
+        parent, bg=background, width=width, borderwidth=border_width, font=font
     )
 
     if temporary_text:
         entry.insert(0, temporary_text)
-        entry.bind("<FocusIn>", lambda _: temp_text(entry))
+        entry.config(fg=app_constants.TEXT_COLOUR_DEFAULT)
+        entry.bind("<FocusIn>", lambda _: focus_in(entry, temporary_text))
+        entry.bind("<FocusOut>", lambda _: focus_out(entry, temporary_text))
 
     return entry
 
 
-def temp_text(entry_field):
-    entry_field.delete(0, "end")
+def focus_in(entry_field: tkinter.Entry, default_text: str):
+    if entry_field.get() == default_text:
+        entry_field.delete(0, "end")
+        entry_field.config(fg=app_constants.TEXT_COLOUR_TYPING)
+
+
+def focus_out(entry_field: tkinter.Entry, default_text: str):
+    if not entry_field.get():
+        entry_field.insert(0, default_text)
+        entry_field.config(fg=app_constants.TEXT_COLOUR_DEFAULT)
+
 
 # TODO: обобщить создание строк типа: окно ввода + кнопка
