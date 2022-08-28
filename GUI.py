@@ -66,88 +66,61 @@ class Interface:
         :return: None
         """
         # Time invitation
-        time_invitation = \
-            tkinter.Label(
-                self.view,
-                text=app_constants.TIME_INVITATION,
-                font=app_constants.FONT)
-        time_invitation.grid(
-            column=0,
-            row=0)
+        time_invitation = tkinter.Label(self.view,
+                                        text=app_constants.TIME_INVITATION,
+                                        font=app_constants.FONT)
+        time_invitation.grid(column=0, row=0)
 
         default_time = self.data.get_start_time()
         # Time windows
-        time_hour = tkinter.Entry(
-            self.view,
-            width=2,
-            font=app_constants.FONT)
-        time_hour.insert(constants.END, str(default_time.hour))
-        time_hour.grid(
-            column=1,
-            row=0)
+        time_hour = make_entry(self.view,
+                               app_constants.ENTRY_BACKGROUND,
+                               app_constants.FONT,
+                               width=2, border_width=3,
+                               temporary_text=str(default_time.hour))
+        time_hour.grid(column=1, row=0)
 
-        time_minute = tkinter.Entry(
-            self.view,
-            width=2,
-            font=app_constants.FONT)
-        time_minute.insert(constants.END, str(default_time.minute))
-        time_minute.grid(
-            column=2,
-            row=0)
+        time_minute = make_entry(self.view,
+                                 app_constants.ENTRY_BACKGROUND,
+                                 app_constants.FONT,
+                                 width=2, border_width=3,
+                                 temporary_text=str(default_time.minute))
+        time_minute.grid(column=2, row=0)
 
-        time_second = tkinter.Entry(
-            self.view,
-            width=2,
-            font=app_constants.FONT)
-        time_second.grid(
-            column=3,
-            row=0)
-        time_second.insert(constants.END, str(default_time.second))
+        time_second = make_entry(self.view,
+                                 app_constants.ENTRY_BACKGROUND,
+                                 app_constants.FONT,
+                                 width=2, border_width=3,
+                                 temporary_text=str(default_time.second))
+        time_second.grid(column=3, row=0)
 
         # Time button
-        time_enter_button = tkinter.Button(
-            self.view,
-            text=app_constants.TIME_ENTER_BUTTON_TEXT,
-            font=app_constants.FONT)
-        self.button_references['time_enter_button'] = time_enter_button
+        time_enter_button = tkinter.Button(self.view,
+                                           text=
+                                           app_constants.TIME_ENTER_BUTTON_TEXT,
+                                           font=app_constants.FONT)
         time_enter_button.config(
             command=lambda: button_functions.get_time_click(
                 self.data, time_hour, time_minute, time_second
             )
         )
-        time_enter_button.grid(
-            column=4,
-            row=0)
+        time_enter_button.grid(column=4, row=0)
+        self.button_references['time_enter_button'] = time_enter_button
 
     def make_spacing_plug(self) -> None:
         """
         Make vertical offset.
         :return: None
         """
-        # TODO: reformat it
-        nothing0 = tkinter.Label(
-            self.view,
-            text=' ',
-            font=app_constants.FONT)
-        nothing0.grid(
-            column=0,
-            row=1)
+        # TODO: try to avoid usage this
+        nothing0 = tkinter.Label(self.view, text=' ', font=app_constants.FONT)
+        nothing0.grid(column=0, row=1)
 
-        nothing1 = tkinter.Label(
-            self.view,
-            text=' ',
-            font=app_constants.FONT)
-        nothing1.grid(
-            column=1,
-            row=1)
+        nothing1 = tkinter.Label(self.view, text=' ', font=app_constants.FONT)
+        nothing1.grid(column=1, row=1)
 
-        nothing2 = tkinter.Label(
-            self.view,
-            text=' ',
-            font=app_constants.FONT)
-        nothing2.grid(
-            column=2,
-            row=1)
+        nothing2 = tkinter.Label(self.view, text=' ', font=app_constants.FONT)
+        nothing2.grid(column=2, row=1)
 
     def make_display_added_photo_count(self) -> None:
         """
@@ -156,23 +129,17 @@ class Interface:
         :return:
         """
         count_photo_text = \
-            tkinter.Label(
-                self.view,
-                text=app_constants.PHOTO_COUNT_TEXT,
-                font=app_constants.FONT)
-        count_photo_text.grid(
-            column=0,
-            row=1)
+            tkinter.Label(self.view,
+                          text=app_constants.PHOTO_COUNT_TEXT,
+                          font=app_constants.FONT)
+        count_photo_text.grid(column=0, row=1)
 
         count_photo_val = \
-            tkinter.Label(
-                self.view,
-                textvariable=self.photo_counter,
-                font=app_constants.FONT,
-                background="#fff")
-        count_photo_val.grid(
-            column=1,
-            row=1)
+            tkinter.Label(self.view,
+                          textvariable=self.photo_counter,
+                          font=app_constants.FONT,
+                          background="#fff")
+        count_photo_val.grid(column=1, row=1)
 
     def make_buttons_for_handling_mode(self):
         """
@@ -212,7 +179,8 @@ class Interface:
             font=app_constants.FONT)
         link_invitation.grid(column=0, row=3)
 
-        link_enter = make_entry(self.view, background="#FFFFEF",
+        link_enter = make_entry(self.view,
+                                background=app_constants.ENTRY_BACKGROUND,
                                 font=app_constants.FONT,
                                 width=15, border_width=3,
                                 temporary_text="Вставьте ссылку")
@@ -250,13 +218,10 @@ class Interface:
         Show log to user.
         :return:
         """
-        self.logs_to_user = \
-            scrolledtext.ScrolledText(
-                self.view, width=35, height=10
-            )
+        self.logs_to_user = scrolledtext.ScrolledText(
+            self.view, width=35, height=10)
         self.logs_to_user.grid(
-            column=0, row=8, columnspan=6
-        )
+            column=0, row=8, columnspan=6)
 
     def start(self):
         # TODO: multithread version
