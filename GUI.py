@@ -1,4 +1,3 @@
-import GUI
 import constants as app_constants
 import utils
 
@@ -279,22 +278,18 @@ class Interface:
         #  Мб как то смотреть на логин или есть в API методы
         #  для проверки существования
         if not sessions:
-            pass
-            # TODO: показать окно авторизации.
-            #  Вызванное окно должно получить от юзера данные,
-            #  либо закрыть приложение при отказе вводить
-            #  (во избежании переполнения стека)
-            # TODO: вызвать себя же еще раз
-        else:
-            start_time = self.data.get_start_time()
-            time_for_sleep = \
-                (start_time - datetime.datetime.now()).seconds - \
-                app_constants.PREPARATION_TIME_IN_SECONDS
-            time.sleep(time_for_sleep)
-            while True:
-                if datetime.datetime.now() >= start_time:
-                    self.handler.core(self, sessions)
-                    break
+            RegistrationWindow().show()
+            # assert at least one account saved
+
+        start_time = self.data.get_start_time()
+        time_for_sleep = \
+            (start_time - datetime.datetime.now()).seconds - \
+            app_constants.PREPARATION_TIME_IN_SECONDS
+        time.sleep(time_for_sleep)
+        while True:
+            if datetime.datetime.now() >= start_time:
+                self.handler.core(self, sessions)
+                break
         # TODO: исчезновение дефолтного времени при начале ввода своего времени
 
 
@@ -322,14 +317,26 @@ class MessageWindow:
 
 
 class RegistrationWindow:
+    # TODO: показать окно авторизации.
+    #  Вызванное окно должно получить от юзера данные,
+    #  либо закрыть приложение при отказе вводить
+    #  (во избежании переполнения стека)
     __slots__ = ('view',)
 
     def __init__(self):
         self.view = tkinter.Tk()
         self.view.geometry(app_constants.GEOMETRY)
 
-        # TODO: 2 Entry с дефолтным текстом логин/пароль,
-        #  пропадающие по щелчку + кнопка ввода
+        login_entry = tkinter.Entry(
+            self.view,
+            width=15,
+            font=app_constants.FONT,
+        )
+        login_entry.insert(0, "Type login here")
+        password_entry = tkinter.Entry()
+
+        get_info_btn = tkinter.Button()
+        # TODO: show message if no login or password
 
     def show(self):
         self.view.mainloop()
@@ -337,3 +344,23 @@ class RegistrationWindow:
 
 def destroy_window(window: tkinter.Tk):
     window.destroy()
+
+
+def make_entry(
+        parent, background, width, border_width, temporary_text=""
+) -> tkinter.Entry:
+    entry = tkinter.Entry(
+        parent, bg=background, width=width, borderwidth=border_width
+    )
+
+    if temporary_text:
+        entry.insert(0, temporary_text)
+        entry.bind("<FocusIn>", lambda _: temp_text(entry))
+
+    return entry
+
+
+def temp_text(entry_field):
+    entry_field.delete(0, "end")
+
+# TODO: обобщить создание строк типа: окно ввода + кнопка
