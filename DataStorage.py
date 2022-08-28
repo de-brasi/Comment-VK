@@ -1,7 +1,7 @@
 import datetime
 import calendar
 
-from random import randint
+from random import choice
 
 
 class Data:
@@ -100,8 +100,7 @@ class Data:
         """
         Get random word from storage with word for comment
         """
-        word_idx = randint(0, len(self.comment_content) - 1)
-        return self.comment_content[word_idx]
+        return choice(self.comment_content)
 
     def empty(self) -> bool:
         return self.photo_counter == 0
@@ -150,7 +149,3 @@ class Data:
             minute=stored_time.minute,
             second=stored_time.second
         )
-
-
-# TODO: добавить в Дату служебные контейнеры -
-#  слова для комментирования, фотки и т.д
